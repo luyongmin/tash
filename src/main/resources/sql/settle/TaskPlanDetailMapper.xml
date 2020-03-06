@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luyongmin.task.demotask.mapper.TaskPlanDetailMapper">
+	
+	<resultMap id="BaseResultMap" type="com.luyongmin.task.demotask.domain.TaskPlanDetail">
+        <result property="id" column="ID" javaType="long"  jdbcType="DECIMAL"/>
+        <result property="planId" column="PLAN_ID" javaType="long"  jdbcType="DECIMAL" />
+        <result property="taskCode" column="TASK_CODE" javaType="java.lang.String" jdbcType="VARCHAR"/> 
+        <result property="taskName" column="TASK_NAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="taskParam" column="TASK_PARAM" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="taskCron" column="TASK_CRON" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="priority" column="PRIORITY" javaType="int"  jdbcType="DECIMAL"/>
+        <result property="createTime" column="CREATE_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="MODIFY_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+	<sql id="Base_Column_List">
+		ID,PLAN_ID,TASK_CODE,TASK_NAME,TASK_PARAM,TASK_CRON,STATUS,PRIORITY,CREATE_TIME,MODIFY_TIME
+	</sql>
+
+	<select id="queryByPlanIdAndStatus"  resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/> from t_task_plan_detail
+		where plan_id=#{planId} and status=#{status}
+	</select>
+
+    <select id="queryByParam" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from t_task_plan_detail
+        where 1 = 1
+        <if test="planId != null">
+            and PLAN_ID=#{planId,jdbcType=DECIMAL}
+        </if>
+        <if test="status != null and status != ''">
+            and STATUS=#{status,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
+	<insert id="add" useGeneratedKeys="true" keyProperty="id"  parameterType="com.luyongmin.task.demotask.domain.TaskPlanDetail">
+		insert into t_task_plan_detail(PLAN_ID,TASK_CODE,TASK_NAME,TASK_PARAM,TASK_CRON,STATUS,PRIORITY,CREATE_TIME,MODIFY_TIME)
+		values(#{planId,jdbcType=DECIMAL},#{taskCode,jdbcType=VARCHAR},#{taskName,jdbcType=VARCHAR},#{taskParam,jdbcType=VARCHAR},#{taskCron,jdbcType=VARCHAR}
+		,#{status,jdbcType=VARCHAR},#{priority,jdbcType=DECIMAL},#{createTime,jdbcType=TIMESTAMP},#{modifyTime,jdbcType=TIMESTAMP})
+	</insert>
+<insert id="batchInsert" parameterType="java.util.List">  
+	insert into t_task_plan_detail(PLAN_ID,TASK_CODE,TASK_NAME,TASK_PARAM,TASK_CRON,STATUS,PRIORITY,CREATE_TIME,MODIFY_TIME)
+    values  
+    <foreach collection="list" item="item" separator="," >  
+        <![CDATA[  (#{item.planId,jdbcType=DECIMAL},#{item.taskCode,jdbcType=VARCHAR},#{item.taskName,jdbcType=VARCHAR},#{item.taskParam,jdbcType=VARCHAR},#{item.taskCron,jdbcType=VARCHAR},
+#{item.status,jdbcType=VARCHAR},#{item.priority,jdbcType=DECIMAL},#{item.createTime,jdbcType=TIMESTAMP},#{item.modifyTime,jdbcType=TIMESTAMP})   ]]>
+    </foreach>  
+</insert> 
+</mapper>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="merchantCollateResovlerComposite" class="com.jfmore.batch.settle.service.merchant.resolver.MerchantCollateResovlerComposite">
+		<property name="resolvers">
+		     <list>
+		     	<ref bean="crowdFundCollateResovler" />
+				<ref bean="mallCollateResovler" />
+				<!-- 增加积分管家对账 -->
+				<ref bean="butlerCollateResolver" />
+		     </list>
+		</property>
+	</bean>
+
+	<!-- 股东方兑入对账代理类 -->
+	<bean id="outerPXCollateResolverComposite" class="com.jfmore.batch.settle.service.outer.resolver.OuterPXCollateResolverComposite">
+		<property name="resolvers">
+		     <list>
+		     	<ref bean="cMCCPointsExColResolver" />
+		     	<ref bean="mUPointsExColResolver" />
+		     </list>
+		</property>
+	</bean>
+	
+	<!-- 任务节点工厂 -->
+	<bean id="taskNodeMngFactory" class="com.jfmore.batch.settle.task.factory.DefaultTaskNodeMngFactory">
+    	<property name="mngMap"> 
+            <map> 
+                  <entry key="ORDER_TABLE_SYS" value-ref="synOrderMng" />
+                <entry key="POINTS_ACCOUNT_TABLE_SYS" value-ref="synAccountMng" />
+                <entry key="MEMBER_INFO_TABLE_SYN" value-ref="synMemberInfoMng" />
+                <entry key="CASHIER_PAY_TRANS_SYN" value-ref="synPayTransMng" />
+                <entry key="POINT_CORE_TXN_TABLE_SYN" value-ref="synTbTxnMng" />     
+                <entry key="MALL_ORIGIN_TABLE_SYN" value-ref="synSettleProductMng" />
+                <entry key="BUTLER_POINTS_ORDER_SYN" value-ref="synButlerPointsOrderMng" />    
+                <entry key="POINT_CORE_ORIGIN_TABLE_SYN" value-ref="synAccureDmRelMng" />
+                <entry key="ALIPAY_COLLATE" value-ref="reconAliPayMng" />
+                <entry key="WXPAY_COLLATE" value-ref="reconWxPayMng" />
+                <entry key="JFPAY_COLLATE" value-ref="reconJFPayMng" />
+                 <entry key="ZHPAY_COLLATE" value-ref="reconZhQuickPayMng" />
+                <entry key="OUTER_EXCHANGE_CMCC_COLLATE" value-ref="reconOuterExCMCCMng" />
+                <entry key="OUTER_EXCHANGE_MU_COLLATE" value-ref="reconOuterExMUMng" />
+                <entry key="OUTER_CONSUME_CMCC_COLLATE" value-ref="reconOuterConsumeCMCCMng" />
+                <entry key="OUTER_CONSUME_MU_COLLATE" value-ref="reconOuterConsumeMUMng" />
+                <entry key="JFZC_ORDER_TABLE_SYN" value-ref="synCrowdPayTradeMng" />
+                <entry key="CASHIER_JFZC_FILE" value-ref="fileMerCashierJFZCMng" />
+                <entry key="MER_JFZC_COLLATE" value-ref="reconMerCrowdMng" />
+                <entry key="MALL_ORDER_TABLE_SYN" value-ref="synMallOrderMng" />
+                <entry key="CASHIER_MALL_FILE" value-ref="fileMerCashierMALLMng" />
+                <entry key="MER_MALL_COLLATE" value-ref="reconMerMallMng" />
+                <entry key="CONSUME_SPLIT" value-ref="splitTranConsumeMng" />
+                <entry key="MER_ORDER_CLEAR" value-ref="clearMerOrderDetailMng" />
+                <entry key="MER_PRODUCT_CLEAR" value-ref="clearMerProductDetailMng" />
+                <entry key="MER_ORDER_FILE" value-ref="fileMerOrderDtlMng" />
+                <entry key="MER_PRODUCT_FILE" value-ref="fileMerProductsDtlMng" />
+                <entry key="MER_TOTEL_CLEAR" value-ref="clearMerTotalMng" />
+                <entry key="OUTER_TRANS_DETAIL_CLEAR" value-ref="clearPointsTransDetailMng" />
+                <entry key="OUTER_TRANS_TOTAL_CLEAR" value-ref="clearPointsTransTotlMng" />
+                <entry key="JFDR_CLEAR" value-ref="clearPointExchangeMng" />
+                <entry key="BOSC_PAY_DETAIL_FILE" value-ref="fileBOSCPayDetailMng" /> 
+                <entry key="POINT_TRIAL_BALANCE_COLLATE" value-ref="pointTrialBalanceMng" />
+                <entry key="CASHIER_BUTLER_EX_SYN" value-ref="synCashierButlerExMng"/>
+                <entry key="MER_BUTLER_COLLATE" value-ref="reconMerButlerMng"/>
+                <entry key="SECOND_TRACE_COLLATE" value-ref="reconSecondTraceMng"/>
+                <entry key="SYS_DIFF_HANDLE" value-ref="diffHandleMng"/>
+		        <entry key="POINTS_ACC_RDM_TABLE_SYS" value-ref="synAccRdmMng"/>
+                <entry key="ROC_EXR_FILE_FETCH" value-ref="fileFetchEXRMng"/>
+                <entry key="ROC_AOU_FILE_FETCH" value-ref="fileFetchAOUMng"/>
+                 <entry key="SEND_ROC_EXR_FILE_FETCH" value-ref="sendFileEXRMng"/>
+                <entry key="SEND_ROC_AOU_FILE_FETCH" value-ref="sendFileAOUMng"/>
+                <entry key="MER_ECard_CLEAR" value-ref="clearMerECardDetailMng"/>
+                <entry key="CHECK_DATA_MNG" value-ref="checkDataMng"/>
+                <entry key="SYN_MALL_DATA_MNG" value-ref="synMallDataMng"/>
+                <entry key="SYN_COLLECT_COLLAGE_TEAM_MNG" value-ref="synCollectCollageTeamDataMng"/>
+                <entry key="SYN_TRHOTELDB_DATA_MNG" value-ref="synTrhoteldbDataMng"/>
+                <entry key="SYN_PARTNER_TB_DATA" value-ref="synPartnerTbDataMng"/>
+                <entry key="SYN_MER_CHANT_MNG" value-ref="synMerChantMngDataMng"/>
+                <entry key="OCCURRENCE_AMOUNT_COLLATE" value-ref="reconOccurrenceAmountMng"/>
+
+                <entry key="TOTLE_MER_POINT" value-ref="totlMerPointMng"/>
+
+
+                <!--<entry key="CHECK_DATA_DIF_MNG" value-ref="checkDataDifMng"/>-->
+                <entry key="STATISTICS_SYN_DATA" value-ref="statisticsSynData"/>
+                <!-- 增加消费积分告警 -->
+				<entry key="ALARM_POINTS_TOTAL_MONTH" value-ref="cmccConsumerMonitorMng"/>
+				
+				<!-- 增加任务节点告警 -->
+				<entry key="ALARM_TASK_NODE" value-ref="taskNodeMonitorMng"/>
+
+		        <entry key="SEND_DIF_FILE_EXR_MNG" value-ref="sendDifFileEXRMng"/>
+                <entry key="SYN_TR_FLIGHT_TB_DATA_MNG" value-ref="synTrFlightTbDataMng"/>
+                <entry key="SYN_TR_FLIGHT_TC_DATA_MNG" value-ref="synTrFlightTcDataMng"/>
+                <entry key="SYN_TR_FOOD_DATA_MNG" value-ref="synTrFoodDataMng"/>
+                <entry key="SYN_COLLECT_COUPON_DATA" value-ref="synCollectCouponDataMng"/>
+                <entry key="ACCOUNT_DAY_CUT" value-ref="accountDayCut"/>
+                <entry key="GEN_EXCEL_FILE" value-ref="genExcelFileMng"/>
+
+                <entry key="ACCOUNT_SETTLE_MONITOR_MNG" value-ref="accountSettleMonitorMng"/>
+
+
+                <!-- 清分采集任务 -->
+				<entry key="COLLECT_CASHSETTLE" value-ref="cashSettleCollectMng"/>
+
+
+
+                <entry key="CYP_SETTLE_CLEAR" value-ref="cypSettleCollectMng"/>
+                <entry key="COLLECT_EXPIRE_POINT" value-ref="expirePointCollectMng"/>
+                <entry key="GD_SETTLE_CLEAR" value-ref="gdSettleCollectMng"/>
+                <entry key="COLLCECT_MALL_COUPON" value-ref="mallCouponCollectMng"/>
+                <entry key="COLLECT_SETTLE_CLEAR" value-ref="settleClearCollectMng"/>
+                <entry key="MER_ORDER_WITH_ACCOUNT_CLEAR" value-ref="clearMerOrderWithAccountMng"/>
+                <entry key="ADD_PROVIDER_ORDER" value-ref="addProviderOrderMng"/>
+
+                <entry key="POINTS_EXCHANGE_SYN" value-ref="synPointsExchangeMng"/>
+                <entry key="FILE_SCANPAY_ORDER_FILE" value-ref="fileScanpayOrderMng"/>
+                <entry key="SCANPAY_SYN" value-ref="synScanpayMng"/>
+
+                <entry key="CREATE_EXCEL_FILE" value-ref="createExcelFileMng"/>
+                <entry key="CLEAR_PRODUCT_TOTAL" value-ref="clearProductTotalMng"/>
+                <entry key="FETCH_SCANPAY_FILE_MNG" value-ref="fetchScanpayFileMng"/>
+                <entry key="FILE_RUI_XIAN_MNG" value-ref="fileRuiXianDetailMng"/>
+                <entry key="CLEAR_SETTLE_MONITOR" value-ref="clearSettleMonitorMng"/>
+
+
+
+            </map>
+        </property>
+    </bean>
+	<!-- 清结算清算规则工厂 -->
+	<bean id="settlementRulesFactory"
+		class="com.jfmore.batch.settle.service.settlerules.impl.DefaultSettlementRulesFactory">
+		<property name="strategyMap">
+			<map>
+				<entry key="BY_SETTLE_PRICE" value-ref="SettlePriceSettleService" />
+				<entry key="BY_POINTS_DEDU" value-ref="PointDeduSettleService" />
+				<entry key="BY_PART_POINTS_DEDU" value-ref="PartPointDeduSettleService" />
+				<entry key="BY_LADDER_POINTS_DEDU" value-ref="LaddyPointSettleService" />
+				<entry key="BY_REAL_POINTS_DEDU" value-ref="RealPointDeduSettleService" />
+			</map>
+		</property>
+	</bean>
+	<!-- 对账差异系统处理类 -->
+	<bean id="diffHandleService" class="com.jfmore.batch.settle.service.diffhandle.impl.DiffHandleServiceImpl">
+		<property name="resolvers">
+			<map>
+				<!-- 渠道，待补全 -->
+				<entry key="ALICOLLATE" value-ref="aliDiffHandleResolver"/>
+				<entry key="ZHCOLLATE" value-ref="zhDiffHandleResolver"/>
+				<entry key="WXCOLLATE" value-ref="wxDiffHandleResolver"/>
+				<entry key="JFCOLLATE" value-ref="jfDiffHandleResolver"/>
+				
+				<!-- 商户 -->
+				
+				<!-- 股东 -->
+				<entry key="YDPOINTSCOLLATE" value-ref="consumeCMCCDiffHandleResolver"/>
+				<entry key="DHPOINTSCOLLATE" value-ref="consumeDHDiffHandleResolver"/>
+				<entry key="OUTERPXCMCC" value-ref="exCMCCDiffHandleResolver"/>
+				<entry key="OUTERPXMU" value-ref="exMUDiffHandleResolver"/>
+				
+				<!-- 二次溯源 -->
+				<entry key="SECONDTRACE" value-ref="secondTraceDiffHandleResolver"/>
+				<entry key="OCCURRENCE_AMOUNT_COLLATE" value-ref="occurrenceAmountDiffHandleResolver"/>
+			</map>
+		</property>
+	</bean>
+
+    <bean id="constant" class="com.jfmore.batch.settle.constants.Constant">
+        <property name="mapperMap">
+            <map>
+                <entry key="points_core" value-ref="checkPointsCoreDataMapper"/>
+                <entry key="cashier" value-ref="checkCashierDataMapper"/>
+                <entry key="mall" value-ref="checkMallDataMapper"/>
+                <entry key="partner" value-ref="checkPartnerDataMapper"/>
+                <entry key="mall_coupon" value-ref="checkMallCouponDataMapper"/>
+                <entry key="trhoteldb" value-ref="checkTrhoteldbDataMapper"/>
+                <entry key="points_present" value-ref="checkPointsPresentDataMapper"/>
+                <entry key="crowdfunding" value-ref="checkCrowdfundingDataMapper"/>
+                <entry key="butler" value-ref="checkButlerDataMapper"/>
+                <entry key="wallet" value-ref="checkWalletDataMapper"/>
+                <entry key="merchantmgn" value-ref="checkMerchantMngMapper"/>
+
+            </map>
+        </property>
+    </bean>
+    
+    <!-- 清分采集器-方法工厂 -->
+	<bean id="collectorFactory"
+		class="com.jfmore.batch.settle.mq.collect.CollectorFactory">
+		<property name="collectorMap">
+			<map>
+				<entry key="CASHSETTLE" value-ref="cashSettleCollector" />
+                <entry key="CORE" value-ref="expirePointCollector"/>
+                <entry key="CPSETTLE" value-ref="settleClearCollector"/>
+                <entry key="GDSETTLE" value-ref="gdSettleClearCollector"/>
+                <entry key="CYPSETTLE" value-ref="cypSettleClearCollector"/>
+                <entry key="MALL" value-ref="mallCollectCollector"/>
+			</map>
+		</property>
+	</bean>
+	
+	<import resource="spring-datasource.xml" />
+	<import resource="spring-quartz.xml" />
+	<import resource="spring-dao.xml" />
+    <!--<import resource="spring-rabbitmq-consumer.xml"/>-->
+</beans>

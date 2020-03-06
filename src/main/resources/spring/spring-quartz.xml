@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	
+	<!--<bean id="createTaskByPlanJob"-->
+		  <!--class="org.springframework.scheduling.quartz.JobDetailFactoryBean">-->
+		<!--<property name="jobClass" value="com.jflm.settle.jobs.CreateTaskByPlanJob"/>-->
+		<!--<property name="name" value="createTaskByPlanJob" />-->
+		<!--<property name="durability" value="true" />-->
+	<!--</bean>-->
+	
+	<!--<bean id="createTaskByPlanTrigger"-->
+		  <!--class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+		<!--<property name="jobDetail">-->
+			<!--<ref bean="createTaskByPlanJob" />-->
+		<!--</property>-->
+		<!--<property name="cronExpression">-->
+			<!--<value>${cron.createTaskByPlanTrigger}</value>-->
+		<!--</property>-->
+	<!--</bean> -->
+	
+	<!-- 调度器 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"  lazy-init="false" >
+		<property name="dataSource">
+			<ref bean="quartzDataSource" />
+		</property>
+		<property name="schedulerName" value="settle-service1"/>
+		<property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
+		<property name="autoStartup" value="true" />
+		<property name="configLocation" value="classpath:quartz.properties" />
+		<property name="triggers">
+			<list>
+				<ref bean="createTaskByPlanTrigger" />
+			</list>
+		</property>
+	</bean>
+</beans>

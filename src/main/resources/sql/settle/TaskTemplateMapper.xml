@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luyongmin.task.demotask.mapper.TaskTemplateMapper">
+	
+	<resultMap id="BaseResultMap" type="com.luyongmin.task.demotask.domain.TaskTemplate">
+        <result property="id" column="ID" javaType="long"  jdbcType="DECIMAL"/>
+        <result property="taskCode" column="TASK_CODE" javaType="java.lang.String" jdbcType="VARCHAR" />
+        <result property="taskName" column="TASK_NAME" javaType="java.lang.String" jdbcType="VARCHAR"/> 
+        <result property="taskDesc" column="TASK_DESC" javaType="java.lang.String" jdbcType="VARCHAR"/> 
+        <result property="taskParam" column="TASK_PARAM" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="createUser" column="CREATE_USER" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="modifyUser" column="MODIFY_USER" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="MODIFY_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+	<sql id="Base_Column_List">
+		ID, TASK_CODE, TASK_NAME, TASK_PARAM, STATUS,CREATE_USER,CREATE_TIME,MODIFY_USER, MODIFY_TIME
+	</sql>
+    
+    <select id="queryByCode" resultMap="BaseResultMap">
+   		select 
+	     <include refid="Base_Column_List" />
+	    from t_task_template
+	    where TASK_CODE = #{taskCode,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="queryAll" resultMap="BaseResultMap">
+   		select 
+	     <include refid="Base_Column_List" />
+	    from t_task_template
+	    where STATUS = '1'
+    </select>
+    
+</mapper>

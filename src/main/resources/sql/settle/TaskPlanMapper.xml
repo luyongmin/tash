@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luyongmin.task.demotask.mapper.TaskPlanMapper">
+	
+	<resultMap id="BaseResultMap" type="com.luyongmin.task.demotask.domain.TaskPlan">
+        <result property="id" column="ID" javaType="long"  jdbcType="DECIMAL"/>
+        <result property="planName" column="PLAN_NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
+        <result property="planDesc" column="PLAN_DESC" javaType="java.lang.String" jdbcType="VARCHAR"/> 
+        <result property="planType" column="PLAN_TYPE" javaType="java.lang.String" jdbcType="VARCHAR"/> 
+        <result property="status" column="STATUS" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="settleTimeStart" column="SETTLE_TIME_START" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="settleTimeEnd" column="SETTLE_TIME_END" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="executeCron" column="EXECUTE_CRON" javaType="java.lang.String" jdbcType="VARCHAR" />
+        <result property="lastExtTime" column="LAST_EXT_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="createUser" column="CREATE_USER" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="modifyUser" column="MODIFY_USER" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="MODIFY_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+	<sql id="Base_Column_List">
+		ID,PLAN_NAME,PLAN_DESC,PLAN_TYPE,STATUS,SETTLE_TIME_START,SETTLE_TIME_END,EXECUTE_CRON,LAST_EXT_TIME,
+		CREATE_USER,CREATE_TIME,MODIFY_USER,MODIFY_TIME
+	</sql>
+    
+    <select id="queryById" resultMap="BaseResultMap">
+   		select 
+	     <include refid="Base_Column_List" />
+	    from t_task_plan
+	    where ID = #{id,jdbcType=DECIMAL}
+    </select>
+
+	<select id="queryByStatus" parameterType="string" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/> from t_task_plan
+		where status=#{status}
+	</select>
+
+	<insert id="add" useGeneratedKeys="true" keyProperty="id"  parameterType="com.luyongmin.task.demotask.domain.TaskPlan">
+		insert into t_task_plan(PLAN_NAME,PLAN_DESC,PLAN_TYPE,STATUS,SETTLE_TIME_START,SETTLE_TIME_END,EXECUTE_CRON,LAST_EXT_TIME,
+		CREATE_USER,CREATE_TIME,MODIFY_USER,MODIFY_TIME)
+		values(#{planName,jdbcType=VARCHAR},#{planDesc,jdbcType=VARCHAR},#{planType,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},
+  		#{settleTimeStart,jdbcType=VARCHAR},#{settleTimeEnd,jdbcType=VARCHAR},#{executeCron,jdbcType=VARCHAR},#{lastExtTime,jdbcType=TIMESTAMP},
+  		#{createUser,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{modifyUser,jdbcType=VARCHAR},#{modifyTime,jdbcType=TIMESTAMP})
+	</insert>
+	
+	<update id="update" parameterType="com.luyongmin.task.demotask.domain.TaskPlan">
+	    update t_task_plan 
+		set status = #{status,jdbcType=VARCHAR},
+			last_ext_time = #{lastExtTime,jdbcType=TIMESTAMP},
+		    modify_user=#{modifyUser,jdbcType=VARCHAR},
+		    modify_time=sysdate() 
+		where ID = #{id,jdbcType=DECIMAL}
+	</update>
+
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luyongmin.task.demotask.mapper.TaskNodeMapper">
+	
+	<resultMap id="BaseResultMap" type="com.luyongmin.task.demotask.domain.TaskNode">
+        <result property="id" column="ID" javaType="long"  jdbcType="DECIMAL"/>
+        <result property="taskId" column="TASK_ID" javaType="long" jdbcType="DECIMAL" />
+        <result property="nodeCode" column="NODE_CODE" javaType="java.lang.String" jdbcType="VARCHAR"/> 
+        <result property="nodeName" column="NODE_NAME" javaType="java.lang.String"  jdbcType="VARCHAR"/>  
+        <result property="respCode" column="RESP_CODE" javaType="java.lang.String"  jdbcType="VARCHAR"/>
+        <result property="respMsg" column="RESP_MSG" javaType="java.lang.String"  jdbcType="VARCHAR"/>
+        <result property="executeToken" column="EXECUTE_TOKEN" javaType="java.lang.String"  jdbcType="VARCHAR"/> 
+        <result property="nodeStartTime" column="NODE_START_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="priority" column="PRIORITY" javaType="java.lang.Integer"  jdbcType="DECIMAL"/>
+        <result property="status" column="STATUS" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="createUser" column="CREATE_USER" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="modifyUser" column="MODIFY_USER" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="MODIFY_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <resultMap id="AllResultMap" type="com.luyongmin.task.demotask.domain.TaskNode" extends="BaseResultMap">
+        <result property="frontNode"  column="FRONT_NODE" javaType = "java.lang.String" />
+    </resultMap>
+
+	<select id="queryByParam" resultMap="AllResultMap" parameterType="map">
+	    select
+	     n.ID, n.TASK_ID, n.NODE_CODE, n.NODE_NAME,n.EXECUTE_TOKEN,n.RESP_CODE, n.RESP_MSG,n.NODE_START_TIME,n.PRIORITY,n.STATUS, n.CREATE_USER,n.CREATE_TIME,n.MODIFY_USER, n.MODIFY_TIME,nt.FRONT_NODE
+	    from t_task_node n left join t_task_node_template nt
+	    on n.NODE_CODE = nt.NODE_CODE
+	    where 1 = 1
+	    <if test="taskId != null">
+			and n.TASK_ID=#{taskId,jdbcType=DECIMAL}
+	    </if>
+	    <if test="status != null and status != ''">
+			and n.STATUS=#{status,jdbcType=VARCHAR}
+	    </if>
+	    <if test="taskIdList != null">
+			 and n.TASK_ID in
+	        <foreach item="item" collection="taskIdList" separator="," open="(" close=")" >
+                  #{item,jdbcType=DECIMAL}
+            </foreach>
+	    </if>
+	    <if test="taskNodeIdList != null">
+			 and n.ID in
+	        <foreach item="item" collection="taskNodeIdList" separator="," open="(" close=")" >
+                  #{item,jdbcType=DECIMAL}
+            </foreach>
+	    </if>
+	</select>
+
+
+
+    <!-- 增加查询条件currentDate判断创建时间是否为今天 -->
+    <select id="queryByParam1" resultMap="AllResultMap" parameterType="map">
+        select
+        n.ID, n.TASK_ID, n.NODE_CODE, n.NODE_NAME,n.RESP_CODE, n.RESP_MSG,n.EXECUTE_TOKEN,n.NODE_START_TIME,n.PRIORITY,n.STATUS, n.CREATE_USER,n.CREATE_TIME,n.MODIFY_USER, n.MODIFY_TIME,nt.FRONT_NODE
+        from t_task_node n left join t_task_node_template nt
+        on n.NODE_CODE = nt.NODE_CODE
+        where 1 = 1
+        <if test="id != null">
+            and n.id=#{id,jdbcType=DECIMAL}
+        </if>
+        <if test="taskId != null">
+            and n.TASK_ID=#{taskId,jdbcType=DECIMAL}
+        </if>
+        <if test="status != null and status != ''">
+            and n.STATUS=#{status,jdbcType=VARCHAR}
+        </if>
+        <if test="currentDate != null and currentDate != ''">
+            and DATE_FORMAT(n.CREATE_TIME,'%Y%m%d')=#{currentDate,jdbcType=VARCHAR}
+        </if>
+        ORDER BY MODIFY_TIME
+    </select>
+
+	<insert id="add" useGeneratedKeys="true" keyProperty="id"  parameterType="com.luyongmin.task.demotask.domain.TaskNode">
+		insert into t_task_node(TASK_ID, NODE_CODE, NODE_NAME,RESP_CODE,RESP_MSG,NODE_START_TIME,PRIORITY, STATUS, CREATE_USER,CREATE_TIME, MODIFY_USER,MODIFY_TIME)
+		values(#{taskId,jdbcType=DECIMAL},#{nodeCode,jdbcType=VARCHAR},#{nodeName,jdbcType=VARCHAR},#{respCode,jdbcType=VARCHAR},#{respMsg,jdbcType=VARCHAR},#{nodeStartTime,jdbcType=TIMESTAMP},#{priority,jdbcType=DECIMAL},
+  		#{status,jdbcType=VARCHAR},#{createUser,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{modifyUser,jdbcType=VARCHAR},#{modifyTime,jdbcType=TIMESTAMP})
+	</insert>
+	
+	<delete id="deleteByTask">
+        delete from t_task_node where TASK_ID=#{taskId,jdbcType=DECIMAL}
+    </delete>
+    
+    <update id="updateStatus" parameterType="com.luyongmin.task.demotask.domain.TaskNode">
+        update t_task_node 
+        set status = #{status,jdbcType=VARCHAR},
+            resp_code = #{respCode,jdbcType=VARCHAR},
+            resp_msg = #{respMsg,jdbcType=VARCHAR},
+            execute_token = #{executeToken,jdbcType=VARCHAR},
+            modify_user=#{modifyUser,jdbcType=VARCHAR},
+            modify_time=sysdate() 
+            where ID = #{id,jdbcType=DECIMAL}
+    </update>
+
+	<update id="batchUpdateStatus" parameterType="map">
+		update t_task_node 
+		set status = #{status,jdbcType=VARCHAR},
+		    resp_code = #{respCode,jdbcType=VARCHAR},
+            resp_msg = #{respMsg,jdbcType=VARCHAR},
+            execute_token = #{executeToken,jdbcType=VARCHAR},
+            modify_user=#{modifyUser,jdbcType=VARCHAR},
+            modify_time=sysdate() 
+		where id in
+        <foreach collection="taskNodeIdList" index="index" item="item" separator="," open="(" close=")">
+            #{item,jdbcType=DECIMAL}
+        </foreach>
+	</update>
+
+
+
+    <update id="updateToken" parameterType="com.luyongmin.task.demotask.domain.TaskNode">
+        update t_task_node
+        set execute_token = #{executeToken,jdbcType=VARCHAR},
+        modify_user=#{modifyUser,jdbcType=VARCHAR},
+        modify_time=sysdate()
+        where ID = #{id,jdbcType=DECIMAL}
+        and (execute_token is null or execute_token = '')
+    </update>
+
+
+    <update id="updateStatus" parameterType="com.luyongmin.task.demotask.domain.TaskNode">
+        update t_task_node
+        <set>
+            <if test="status != null ">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="respCode != null ">
+                resp_code = #{respCode,jdbcType=VARCHAR},
+            </if>
+            <if test="respMsg != null ">
+                resp_msg = #{respMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyUser != null ">
+                modify_user=#{modifyUser,jdbcType=VARCHAR},
+            </if>
+            modify_time=sysdate()
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+</mapper>

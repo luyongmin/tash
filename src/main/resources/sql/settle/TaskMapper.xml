@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luyongmin.task.demotask.mapper.TaskMapper">
+	
+	<resultMap id="BaseResultMap" type="com.luyongmin.task.demotask.domain.Task">
+        <result property="id" column="ID" javaType="long"  jdbcType="DECIMAL"/>
+        <result property="taskCode" column="TASK_CODE" javaType="java.lang.String" jdbcType="VARCHAR" />
+        <result property="taskName" column="TASK_NAME" javaType="java.lang.String" jdbcType="VARCHAR"/> 
+        <result property="planId" column="PLAN_ID" javaType="long"  jdbcType="DECIMAL"/>
+        <result property="taskParam" column="TASK_PARAM" javaType="java.lang.String" jdbcType="VARCHAR"/>      
+        <result property="taskStartTime" column="TASK_START_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="settleDate" column="SETTLE_DATE" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="priority" column="PRIORITY" javaType="Integer"  jdbcType="DECIMAL"/>
+        <result property="createUser" column="CREATE_USER" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="modifyUser" column="MODIFY_USER" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="MODIFY_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+	<sql id="Base_Column_List">
+		ID, TASK_CODE, TASK_NAME, PLAN_ID, TASK_PARAM, TASK_START_TIME,SETTLE_DATE, STATUS, PRIORITY,
+		CREATE_USER,CREATE_TIME,MODIFY_USER, MODIFY_TIME
+	</sql>
+    
+    <select id="queryById" resultMap="BaseResultMap">
+   		select 
+	     <include refid="Base_Column_List" />
+	    from t_task
+	    where ID = #{id,jdbcType=DECIMAL}
+    </select>
+
+	<select id="queryByParam" resultMap="BaseResultMap" parameterType="map">
+	    select
+	     <include refid="Base_Column_List" />
+	    from t_task
+	    where 1 = 1
+	    <if test="planId != null">
+			and PLAN_ID=#{planId,jdbcType=DECIMAL}
+	    </if>
+	    <if test="status != null and status != ''">
+			and STATUS=#{status,jdbcType=VARCHAR}
+	    </if>
+	    <if test="taskCode != null and taskCode != ''">
+			and TASK_CODE=#{taskCode,jdbcType=VARCHAR}
+	    </if>
+	    <if test="taskIdList != null">
+			 and ID in
+	        <foreach item="item" collection="taskIdList" separator="," open="(" close=")" >
+                  #{item,jdbcType=DECIMAL}
+            </foreach>
+	    </if>
+	    <if test="_start_time != null and _start_time != '' "> 
+			<![CDATA[ and SETTLE_DATE >= #{_start_time,jdbcType=VARCHAR} ]]> 
+		</if>
+		<if test="_end_time != null and _end_time != '' "> 
+	        <![CDATA[ and SETTLE_DATE <= #{_end_time,jdbcType=VARCHAR} ]]> 
+		</if>
+		<if test="settleDate != null and settleDate != ''">
+			and SETTLE_DATE=#{settleDate,jdbcType=VARCHAR}
+	    </if>
+	</select>
+
+	<insert id="add" useGeneratedKeys="true" keyProperty="id"  parameterType="com.luyongmin.task.demotask.domain.Task">
+		<![CDATA[
+		insert into t_task(TASK_CODE, TASK_NAME, PLAN_ID, TASK_PARAM, TASK_START_TIME, SETTLE_DATE,STATUS, PRIORITY,
+		CREATE_USER,CREATE_TIME,MODIFY_USER, MODIFY_TIME)
+		values(#{taskCode,jdbcType=VARCHAR},#{taskName,jdbcType=VARCHAR},#{planId,jdbcType=DECIMAL},
+  		#{taskParam,jdbcType=VARCHAR},#{taskStartTime,jdbcType=TIMESTAMP},#{settleDate,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{priority,jdbcType=DECIMAL},
+  		#{createUser,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{modifyUser,jdbcType=VARCHAR},#{modifyTime,jdbcType=TIMESTAMP})
+	    ]]> 
+	</insert>
+	
+	<update id="updateStatus" parameterType="com.luyongmin.task.demotask.domain.Task">
+		update t_task 
+		set status = #{status,jdbcType=VARCHAR},modify_user=#{modifyUser,jdbcType=VARCHAR},modify_time=sysdate() 
+		where ID = #{id,jdbcType=DECIMAL}
+	</update>
+	
+	<update id="batchUpdateStatus" parameterType="map">
+		update t_task 
+		set status = #{status,jdbcType=VARCHAR},modify_user=#{modifyUser,jdbcType=VARCHAR},modify_time=sysdate() 
+		where id in
+        <foreach collection="taskIdList" index="index" item="item" separator="," open="(" close=")">
+            #{item,jdbcType=DECIMAL}
+        </foreach>
+	</update>
+
+	<select id="queryBySettleDate" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_task
+		where settle_date = #{settleDate,jdbcType=VARCHAR}
+	</select>
+
+
+</mapper>
