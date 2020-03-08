@@ -40,7 +40,7 @@ public class SettleTaskDispatchJob {
     @Value("#{SERVICE_IP}")
     private static String service_ip;
 
-    @Scheduled(cron = "0 0/2 * * * ?")
+    @Scheduled(cron = "0 0/20 * * * ?")
     public void run() {
         logger.info("SettleTaskDispatchJob start");
 

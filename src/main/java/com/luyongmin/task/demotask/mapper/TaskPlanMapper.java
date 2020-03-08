@@ -39,4 +39,10 @@ public interface TaskPlanMapper {
      * @return
      */
     int update(TaskPlan plan);
+
+    /**
+     * 查询任务计划
+     * @return
+     */
+    List<TaskPlan> queryTaskPlan();
 }

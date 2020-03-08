@@ -82,17 +82,7 @@
 	<delete id="deleteByTask">
         delete from t_task_node where TASK_ID=#{taskId,jdbcType=DECIMAL}
     </delete>
-    
-    <update id="updateStatus" parameterType="com.luyongmin.task.demotask.domain.TaskNode">
-        update t_task_node 
-        set status = #{status,jdbcType=VARCHAR},
-            resp_code = #{respCode,jdbcType=VARCHAR},
-            resp_msg = #{respMsg,jdbcType=VARCHAR},
-            execute_token = #{executeToken,jdbcType=VARCHAR},
-            modify_user=#{modifyUser,jdbcType=VARCHAR},
-            modify_time=sysdate() 
-            where ID = #{id,jdbcType=DECIMAL}
-    </update>
+
 
 	<update id="batchUpdateStatus" parameterType="map">
 		update t_task_node 

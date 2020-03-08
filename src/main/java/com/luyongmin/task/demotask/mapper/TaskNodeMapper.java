@@ -58,18 +58,14 @@ public interface TaskNodeMapper {
 
     /**
      * 更新执行令牌
-     * @param id
-     * @param modifyUser
-     * @param token
+     * @param taskNode
      */
     void updateToken(TaskNode taskNode);
 
 
     /**
      * 更新任务节点状态
-     * @param nodeId
-     * @param modifyUser
-     * @param status
+     * @param taskNode
      */
-    public void updateStatus(TaskNode taskNode);
+    void updateStatus(TaskNode taskNode);
 }

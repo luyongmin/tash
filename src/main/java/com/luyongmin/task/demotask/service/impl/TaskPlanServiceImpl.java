@@ -118,6 +118,11 @@ public class TaskPlanServiceImpl implements TaskPlanService {
 
     }
 
+    @Override
+    public List<TaskPlan> queryTaskPlanByPage() {
+        return taskPlanMapper.queryTaskPlan();
+    }
+
 
     /**
      * 解析清算时间

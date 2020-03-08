@@ -52,4 +52,10 @@
 		where ID = #{id,jdbcType=DECIMAL}
 	</update>
 
+
+	<select id="queryTaskPlan" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/> from
+		t_task_plan
+	</select>
+
 </mapper>

@@ -34,7 +34,7 @@ public class SettleTaskExecuteJob {
     private int waitTime;
 
 
-    @Scheduled(cron = "")
+    @Scheduled(cron = "0 0/50 * * * ?")
     public void run(){
 
         try {

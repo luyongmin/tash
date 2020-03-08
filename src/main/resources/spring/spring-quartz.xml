@@ -22,18 +22,5 @@
 	<!--</bean> -->
 	
 	<!-- 调度器 -->
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"  lazy-init="false" >
-		<property name="dataSource">
-			<ref bean="quartzDataSource" />
-		</property>
-		<property name="schedulerName" value="settle-service1"/>
-		<property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
-		<property name="autoStartup" value="true" />
-		<property name="configLocation" value="classpath:quartz.properties" />
-		<property name="triggers">
-			<list>
-				<ref bean="createTaskByPlanTrigger" />
-			</list>
-		</property>
-	</bean>
+
 </beans>

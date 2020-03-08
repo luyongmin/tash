@@ -28,4 +28,9 @@ public interface TaskPlanService {
      * @param taskPlan
      */
     void update(TaskPlan taskPlan);
+
+    /**
+     * 查询计划
+     */
+    List<TaskPlan> queryTaskPlanByPage();
 }
