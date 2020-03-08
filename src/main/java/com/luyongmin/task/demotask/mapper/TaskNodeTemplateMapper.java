@@ -16,5 +16,5 @@ public interface TaskNodeTemplateMapper {
      * @param taskCode
      * @return
      */
-    public List<TaskNodeTemplate> queryByTaskCode(String taskCode);
+    List<TaskNodeTemplate> queryByTaskCode(String taskCode);
 }

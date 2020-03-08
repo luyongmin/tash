@@ -323,15 +323,15 @@
 					<thead>
 						<tr style="color: #B3B3B3;">
 							<td><input type="checkbox" /></td>
-							<td>计划ID</td>
-							<td>计划名称</td>
-							<td>计划类型</td>
-							<td>计划描述</td>
-							<td>上次执行时间</td>
-							<td>状态</td>
-							<td>结算开始时间</td>
-							<td>结算关闭时间</td>
-							<td>执行CRON</td>
+							<td>任务id</td>
+							<td>任务编号</td>
+							<td>任务名称</td>
+							<td>计划id</td>
+							<td>任务参数</td>
+							<td>任务开始执行时间</td>
+							<td>结算日期</td>
+							<td>任务执行状态</td>
+							<td>优先级</td>
 							<td>创建用户</td>
 							<td>创建时间</td>
 							<td>修改用户</td>
@@ -339,24 +339,22 @@
 						</tr>
 					</thead>
 					<tbody>
-
-						<tr class="active" th:each="taskPlan : ${list}">
+						<tr class="active" th:each="task : ${list}">
 							<td><input type="checkbox" /></td>
-							<td th:text="${taskPlan.id}"></td>
-							<td th:text="${taskPlan.planName}"></td>
-							<td th:text="${taskPlan.planType}"></td>
-							<td th:text="${taskPlan.planDesc}"></td>
-							<td th:text="${taskPlan.lastExtTime}"></td>
-							<td th:text="${taskPlan.status}"></td>
-							<td th:text="${taskPlan.settleTimeStart}"></td>
-							<td th:text="${taskPlan.settleTimeEnd}"></td>
-							<td th:text="${taskPlan.executeCron}"></td>
-							<td th:text="${taskPlan.createUser}"></td>
-							<td th:text="${taskPlan.createTime}"></td>
-							<td th:text="${taskPlan.modifyUser}"></td>
-							<td th:text="${taskPlan.modifyTime}"></td>
+							<td th:text="${task.id}"></td>
+							<td th:text="${task.taskCode}"></td>
+							<td th:text="${task.taskName}"></td>
+							<td th:text="${task.planId}"></td>
+							<td th:text="${task.taskParam}"></td>
+							<td th:text="${task.taskStartTime}"></td>
+							<td th:text="${task.settleDate}"></td>
+							<td th:text="${task.status}"></td>
+							<td th:text="${task.priority}"></td>
+							<td th:text="${task.createUser}"></td>
+							<td th:text="${task.createTime}"></td>
+							<td th:text="${task.modifyUser}"></td>
+							<td th:text="${task.modifyTime}"></td>
 						</tr>
-
 					</tbody>
 				</table>
 			</div>
